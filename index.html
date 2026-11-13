@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>黎凡特讀者導覽</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* 版面概念：地圖上的「陸地白」當紙、「海洋靛」當墨；各勢力沿用原作地圖上的顏色當識別色。 */
+:root{
+  --paper:#f3f4f8;
+  --card:#ffffff;
+  --ink:#24224a;
+  --muted:#5d5c7c;
+  --line:#d9d9e6;
+  --sea:#46457a;
+  --accent:#7b3fc4;
+  --c-heb:#5f86c4;   /* 希伯來：海 */
+  --c-gan:#2fae8e;   /* 犍陀羅：薄荷綠 */
+  --c-may:#b45f6e;   /* 梅耶：玫瑰 */
+  --c-eden:#9246d6;  /* 伊甸：紫 */
+  --c-ash:#e284ad;   /* 亞述／人理：粉 */
+  --c-tal:#d9a823;   /* 塔木德／塔爾塔羅斯：黃 */
+  --c-other:#7d7c96;
+  --display:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#16152b; --card:#201f3b; --ink:#ecebf7; --muted:#a9a8c6; --line:#36355a;
+    --sea:#0e0d20; --accent:#b98af0;
+    --c-heb:#8fb0e6; --c-gan:#5fd6b5; --c-may:#e0909c; --c-eden:#b880f0; --c-ash:#f0a6c6; --c-tal:#f0c95a; --c-other:#a3a2bd;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#16152b; --card:#201f3b; --ink:#ecebf7; --muted:#a9a8c6; --line:#36355a;
+  --sea:#0e0d20; --accent:#b98af0;
+  --c-heb:#8fb0e6; --c-gan:#5fd6b5; --c-may:#e0909c; --c-eden:#b880f0; --c-ash:#f0a6c6; --c-tal:#f0c95a; --c-other:#a3a2bd;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.8}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.35;margin:0}
+h2{font-size:clamp(1.5rem,3.2vw,2rem);font-weight:900}
+h3{font-size:1.15rem;font-weight:600}
+p{margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.prose{max-width:40em}
+
+/* 頂部導覽 */
+.bar{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+.bar nav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+.bar nav a{color:var(--ink);text-decoration:none;font-size:.9rem;padding:4px 10px;border-radius:999px}
+.bar nav a:hover{background:var(--line)}
+.reading{display:flex;align-items:center;gap:6px;font-size:.85rem;color:var(--muted)}
+.reading select{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
+
+/* 開場 */
+.hero{background:var(--sea);color:#f1f0fb;padding:56px 0 48px}
+.hero .kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.12em;opacity:.75}
+.hero h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:900;margin:8px 0 14px;letter-spacing:.04em}
+.hero .lede{max-width:36em;font-size:1.05rem;opacity:.92}
+.five{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:28px;counter-reset:f}
+.five li{list-style:none;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:14px 16px;font-size:.95rem;line-height:1.65}
+.five li b{display:block;font-family:var(--display);font-size:1.05rem;margin-bottom:4px;color:#fff}
+.five{padding:0;margin-bottom:0}
+
+section.block{padding:56px 0;border-bottom:1px solid var(--line)}
+.sec-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.sec-head .no{font-family:var(--mono);color:var(--accent);font-size:.85rem}
+.sec-head p{color:var(--muted);font-size:.95rem;flex-basis:100%}
+
+/* 圖 */
+figure{margin:24px 0 0}
+figure svg{display:block;width:100%;height:auto;max-width:100%}
+figcaption{color:var(--muted);font-size:.85rem;margin-top:8px}
+.figbox{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;overflow-x:auto}
+.figbox svg{min-width:640px}
+
+/* 卡片 */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;border-top:4px solid var(--fc,var(--c-other));display:flex;flex-direction:column;gap:8px}
+.card h3{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.card .en{font-family:var(--mono);font-size:.72rem;color:var(--muted);font-weight:500}
+.card .role{font-size:.85rem;font-weight:700;color:var(--fc)}
+.card p{font-size:.95rem}
+.card ul{margin:0;padding-left:1.1em;font-size:.9rem;color:var(--muted)}
+.chip{display:inline-block;font-family:var(--mono);font-size:.7rem;padding:1px 7px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.f-heb{--fc:var(--c-heb)} .f-gan{--fc:var(--c-gan)} .f-may{--fc:var(--c-may)} .f-eden{--fc:var(--c-eden)} .f-ash{--fc:var(--c-ash)} .f-tal{--fc:var(--c-tal)} .f-other{--fc:var(--c-other)}
+
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+@media (max-width:760px){.twocol{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.panel h3{margin-bottom:10px}
+
+table.cmp{width:100%;border-collapse:collapse;font-size:.92rem}
+table.cmp th,table.cmp td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+table.cmp th{font-weight:700;color:var(--muted);font-size:.82rem}
+table.cmp td:first-child{font-weight:700;white-space:nowrap}
+.tablebox{overflow-x:auto}
+
+/* 地圖 */
+.mapbox{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;margin-top:22px;align-items:start}
+@media (max-width:860px){.mapbox{grid-template-columns:1fr}}
+.mapbox img{width:100%;height:auto;border-radius:12px;border:1px solid var(--line);display:block}
+.places{display:flex;flex-direction:column;gap:8px}
+.place{display:grid;grid-template-columns:14px 1fr;gap:10px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:.92rem}
+.place .dot{width:12px;height:12px;border-radius:50%;background:var(--fc);margin-top:7px}
+.place b{font-family:var(--display)}
+.scale{margin-top:22px}
+.scale-row{display:grid;grid-template-columns:7.5em 1fr;gap:10px;align-items:center;font-size:.88rem;margin:6px 0}
+.scale-bar{height:12px;border-radius:6px;background:var(--c-eden);opacity:.85}
+
+/* 時間線 */
+.tl{position:relative;margin-top:26px;padding-left:28px}
+.tl::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.ev{position:relative;padding:0 0 22px}
+.ev::before{content:"";position:absolute;left:-26px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--fc,var(--accent))}
+.ev.now::before{background:var(--c-ash);border-color:var(--c-ash)}
+.ev .when{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.ev h3{font-size:1.05rem;margin:2px 0 4px}
+.ev p{font-size:.94rem;max-width:42em}
+.tracks{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+@media (max-width:760px){.tracks{grid-template-columns:1fr}}
+.track{border-radius:12px;padding:14px 16px;border:1px solid var(--line);background:var(--card)}
+.track b{font-family:var(--display)}
+
+/* 人物 */
+.cast{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:14px}
+.person{display:grid;grid-template-columns:44px 1fr;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.avatar{width:44px;height:44px;border-radius:50%;background:var(--fc);color:#fff;display:grid;place-items:center;font-family:var(--display);font-weight:900;font-size:1.1rem}
+.person b{font-family:var(--display);font-size:1.02rem}
+.person p{font-size:.9rem;color:var(--ink)}
+.person .meta{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 4px}
+.castgroup{margin-top:26px}
+.castgroup h3{font-size:1rem;color:var(--muted)}
+
+/* 名詞速查 */
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:18px}
+.tools input{flex:1 1 240px;font:inherit;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.cats{display:flex;gap:6px;flex-wrap:wrap}
+.cats button{font:inherit;font-size:.85rem;padding:5px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.cats button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.gl{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-top:16px}
+.term{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--fc,var(--c-other));border-radius:10px;padding:12px 14px}
+.term summary{cursor:pointer;list-style:none;display:flex;flex-direction:column;gap:2px}
+.term summary::-webkit-details-marker{display:none}
+.term .t{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.term .t b{font-family:var(--display);font-size:1.05rem}
+.term .s{font-size:.92rem}
+.term .more{font-size:.88rem;color:var(--muted);margin-top:8px;border-top:1px dashed var(--line);padding-top:8px}
+.term summary .hint{font-size:.75rem;color:var(--accent)}
+.term[open] summary .hint{display:none}
+.empty{color:var(--muted);margin-top:14px}
+.hidden-note{margin-top:14px;font-size:.88rem;color:var(--muted)}
+
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:20px}
+.tip{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:.93rem}
+.tip b{font-family:var(--display);display:block;margin-bottom:4px;font-size:1.02rem}
+
+footer{padding:36px 0 56px;color:var(--muted);font-size:.85rem}
+[data-ch].is-later{display:none !important}
+</style>
+</head>
+<body>
+
+<header class="bar" id="top">
+  <div class="wrap">
+    <nav aria-label="章節導覽">
+      <a href="#start">入門</a>
+      <a href="#powers">勢力</a>
+      <a href="#status">身分與身體</a>
+      <a href="#map">地圖</a>
+      <a href="#timeline">時間</a>
+      <a href="#cast">人物</a>
+      <a href="#glossary">名詞速查</a>
+      <a href="#errata">勘誤與更新</a>
+    </nav>
+    <label class="reading" for="readTo">我讀到
+      <select id="readTo"></select>
+    </label>
+  </div>
+</header>
+
+<div class="hero" id="start">
+  <div class="wrap">
+    <div class="kicker">LEVANT · READER'S GUIDE</div>
+    <h1>黎凡特讀者導覽</h1>
+    <p class="lede">讀小說時忘了某個名詞、搞不清楚誰歸誰管，就回來這裡查。右上角選你讀到哪一章，後面章節才出現的內容會自動藏起來。</p>
+    <ul class="five">
+      <li><b>世界被污染過</b>舊文明被一種外來的污染毀掉。這種污染會讓人發瘋、讓機器失靈、讓生物的基因亂混。一般人把它叫做「詛咒」。</li>
+      <li><b>三大集團分工治理</b>希伯來管知識，犍陀羅管武力，梅耶管身體。說「集團」就是指這三個。</li>
+      <li><b>伊甸是最大的企業</b>伊甸不是集團，但全黎凡特的交通和通訊都靠它，影響力最接近第四個集團。</li>
+      <li><b>人屬於企業</b>一般人叫「人財」，從出生、受教育到能不能生小孩，都由企業和集團安排。</li>
+      <li><b>故事分兩條時間線</b>正篇寫莉莉絲和亞當的過去；後日談是「現在」，兩人已經在打離婚官司。</li>
+    </ul>
+  </div>
+</div>
+
+<main>
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head"><span class="no">00</span><h2>先知道這幾個寫法</h2>
+      <p>不少讀者卡住，問題出在文字習慣。先看這裡，後面讀起來會順很多。</p></div>
+    <div class="tips">
+      <div class="tip"><b>每個人都用「他」</b>書裡的第三人稱一律寫「他」，所以莉莉絲、夏娃這些女性角色也寫作「他」。這不代表黎凡特沒有性別意識：女士、夫人這類帶性別的稱謂，後面要加「閣下」才算尊重；少了「閣下」直接叫，就帶有貶低的意思。</div>
+      <div class="tip"><b>「人財」不是錯字</b>人在這個世界被當成企業資產來培養和計算，所以「人才」寫成「人財」。</div>
+      <div class="tip"><b>地表沒有「小時」</b>一般人用「分鐘」和「日間時區」算時間跟距離。只有希伯來保留二十四小時制，所以莉莉絲隨口說「幾點鐘」，亞當會愣住。</div>
+      <div class="tip"><b>拉結、雅各是身分</b>這些是身分稱呼，不是姓氏。書裡會說「希伯來拉結」「這位拉結」，不會說「莉莉絲拉結」。</div>
+      <div class="tip"><b>載具＝交通工具</b>「載具」指各種車輛和移動裝置，「個人裝置」就是隨身的通訊機。</div>
+      <div class="tip"><b>詛咒＝污染</b>一般人說「詛咒」，懂科學的人說「污染」，指的是同一個東西，差別在說話的人知道多少。</div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="powers">
+  <div class="wrap">
+    <div class="sec-head"><span class="no">01</span><h2>誰管什麼</h2>
+      <p>黎凡特沒有國家，由三大集團和企業體系治理。看懂下面這張圖，大部分的名詞就有位置可以放了。</p></div>
+
+    <div class="figbox">
+    <figure style="margin:0">
+      <svg viewBox="0 0 900 560" role="img" aria-label="權力結構圖：希伯來、犍陀羅、梅耶三大集團在上，伊甸連接各地，下層是文化圈、地區商社、企業與人財。">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+        </defs>
+        <g font-family="Noto Sans TC, sans-serif" fill="currentColor" style="color:var(--ink)">
+          <text x="450" y="26" text-anchor="middle" font-size="13" fill="var(--muted)">三大集團（世界僅存的最高主權）</text>
+          <!-- 希伯來 -->
+          <rect x="330" y="40" width="240" height="78" rx="12" fill="none" stroke="var(--c-heb)" stroke-width="3"/>
+          <text x="450" y="72" text-anchor="middle" font-size="20" font-weight="700" font-family="Noto Serif TC, serif">希伯來</text>
+          <text x="450" y="98" text-anchor="middle" font-size="13" fill="var(--muted)">知識・教育・技術授權・法規</text>
+          <!-- 犍陀羅 -->
+          <rect x="40" y="150" width="230" height="78" rx="12" fill="none" stroke="var(--c-gan)" stroke-width="3"/>
+          <text x="155" y="182" text-anchor="middle" font-size="20" font-weight="700" font-family="Noto Serif TC, serif">犍陀羅</text>
+          <text x="155" y="208" text-anchor="middle" font-size="13" fill="var(--muted)">軍隊・治安・救災</text>
+          <!-- 梅耶 -->
+          <rect x="630" y="150" width="230" height="78" rx="12" fill="none" stroke="var(--c-may)" stroke-width="3"/>
+          <text x="745" y="182" text-anchor="middle" font-size="20" font-weight="700" font-family="Noto Serif TC, serif">梅耶</text>
+          <text x="745" y="208" text-anchor="middle" font-size="13" fill="var(--muted)">醫療・生育・基因・身體</text>
+          <!-- 授權箭頭 -->
+          <path d="M330 92 Q240 100 200 148" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#ar)"/>
+          <path d="M570 92 Q660 100 700 148" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#ar)"/>
+          <text x="232" y="112" text-anchor="middle" font-size="12" fill="var(--muted)">技術授權</text>
+          <text x="668" y="112" text-anchor="middle" font-size="12" fill="var(--muted)">技術授權</text>
+          <!-- 伊甸 -->
+          <rect x="335" y="250" width="230" height="78" rx="12" fill="none" stroke="var(--c-eden)" stroke-width="3" stroke-dasharray="7 5"/>
+          <text x="450" y="282" text-anchor="middle" font-size="20" font-weight="700" font-family="Noto Serif TC, serif">伊甸</text>
+          <text x="450" y="308" text-anchor="middle" font-size="13" fill="var(--muted)">最大企業・交通・通訊・淨化</text>
+          <text x="450" y="244" text-anchor="middle" font-size="12" fill="var(--c-eden)">不是集團，但人人都得用它</text>
+          <!-- 文化圈 -->
+          <rect x="40" y="380" width="820" height="150" rx="14" fill="none" stroke="var(--line)" stroke-width="2"/>
+          <text x="60" y="404" font-size="13" fill="var(--muted)">文化圈（三大集團直轄以外的所有地區）</text>
+          <g font-size="15" font-weight="700" text-anchor="middle">
+            <rect x="80" y="430" width="170" height="52" rx="10" fill="none" stroke="currentColor" stroke-width="1.4"/>
+            <text x="165" y="462">地區商社</text>
+            <rect x="330" y="430" width="170" height="52" rx="10" fill="none" stroke="currentColor" stroke-width="1.4"/>
+            <text x="415" y="462">企業</text>
+            <rect x="580" y="430" width="200" height="52" rx="10" fill="none" stroke="currentColor" stroke-width="1.4"/>
+            <text x="680" y="462">人財（一般人）</text>
+          </g>
+          <line x1="250" y1="456" x2="326" y2="456" stroke="currentColor" stroke-width="1.4" marker-end="url(#ar)"/>
+          <text x="288" y="448" text-anchor="middle" font-size="12" fill="var(--muted)">由多家組成</text>
+          <line x1="500" y1="456" x2="576" y2="456" stroke="currentColor" stroke-width="1.4" marker-end="url(#ar)"/>
+          <text x="538" y="448" text-anchor="middle" font-size="12" fill="var(--muted)">擁有・安排</text>
+          <text x="680" y="508" text-anchor="middle" font-size="12" fill="var(--muted)">靠貢獻換「購買權」</text>
+          <!-- 下行影響 -->
+          <path d="M155 228 L155 376" fill="none" stroke="var(--c-gan)" stroke-width="1.6" marker-end="url(#ar)" style="color:var(--c-gan)"/>
+          <text x="165" y="300" font-size="12" fill="var(--muted)">商圈警備</text>
+          <text x="165" y="318" font-size="12" fill="var(--muted)">災區救援</text>
+          <path d="M745 228 L745 376" fill="none" stroke="var(--c-may)" stroke-width="1.6" marker-end="url(#ar)" style="color:var(--c-may)"/>
+          <text x="735" y="300" text-anchor="end" font-size="12" fill="var(--muted)">生育許可</text>
+          <text x="735" y="318" text-anchor="end" font-size="12" fill="var(--muted)">基因整形・器官</text>
+          <path d="M450 328 L450 376" fill="none" stroke="var(--c-eden)" stroke-width="1.6" marker-end="url(#ar)" style="color:var(--c-eden)"/>
+          <text x="460" y="358" font-size="12" fill="var(--muted)">載具・通訊骨幹</text>
+          <path d="M440 118 C420 180 300 220 280 376" fill="none" stroke="var(--c-heb)" stroke-width="1.6" stroke-dasharray="4 4" marker-end="url(#ar)" style="color:var(--c-heb)"/>
+          <text x="300" y="250" text-anchor="end" font-size="12" fill="var(--muted)">基礎教育</text>
+          <text x="300" y="268" text-anchor="end" font-size="12" fill="var(--muted)">法規與執法</text>
+        </g>
+      </svg>
+      <figcaption>希伯來把技術授權給另外兩個集團和各企業，也負責所有地區的基礎教育與執法；犍陀羅與梅耶各自把武力和醫療送進文化圈；伊甸鋪設的載具與通訊把所有地方串在一起。</figcaption>
+    </figure>
+    </div>
+
+    <div class="grid" id="factionCards"></div>
+  </div>
+</section>
+
+<section class="block" id="status">
+  <div class="wrap">
+    <div class="sec-head"><span class="no">02</span><h2>身分與身體</h2>
+      <p>書裡很多衝突來自「誰有資格」：誰能連上知識網路、誰能生小孩、誰能換身體。</p></div>
+
+    <div class="twocol">
+      <div class="panel" data-ch="5">
+        <h3>希伯來人的三種身分</h3>
+        <div class="figbox" style="padding:10px;border:none">
+        <figure style="margin:0">
+          <svg viewBox="0 0 460 300" role="img" aria-label="雅各管理網路接口；拉結可連線但每四年要回希伯來一次；超過期限或被褫奪就成為利亞。" style="min-width:0">
+            <defs><marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+            <g font-family="Noto Sans TC, sans-serif" fill="currentColor" style="color:var(--ink)">
+              <rect x="150" y="10" width="160" height="60" rx="10" fill="none" stroke="var(--c-heb)" stroke-width="3"/>
+              <text x="230" y="38" text-anchor="middle" font-size="18" font-weight="700" font-family="Noto Serif TC, serif">雅各</text>
+              <text x="230" y="58" text-anchor="middle" font-size="12" fill="var(--muted)">最高執政・管理網路接口</text>
+              <rect x="150" y="120" width="160" height="60" rx="10" fill="none" stroke="var(--c-heb)" stroke-width="2"/>
+              <text x="230" y="148" text-anchor="middle" font-size="18" font-weight="700" font-family="Noto Serif TC, serif">拉結</text>
+              <text x="230" y="168" text-anchor="middle" font-size="12" fill="var(--muted)">正式公民・可連線下載知識</text>
+              <rect x="150" y="230" width="160" height="60" rx="10" fill="none" stroke="var(--c-other)" stroke-width="2" stroke-dasharray="6 4"/>
+              <text x="230" y="258" text-anchor="middle" font-size="18" font-weight="700" font-family="Noto Serif TC, serif">利亞</text>
+              <text x="230" y="278" text-anchor="middle" font-size="12" fill="var(--muted)">失去連線的希伯來人</text>
+              <line x1="230" y1="70" x2="230" y2="116" stroke="currentColor" stroke-width="1.4" marker-end="url(#ar2)"/>
+              <text x="240" y="98" font-size="12" fill="var(--muted)">可開關接口</text>
+              <line x1="230" y1="180" x2="230" y2="226" stroke="currentColor" stroke-width="1.4" marker-end="url(#ar2)"/>
+              <text x="240" y="200" font-size="12" fill="var(--muted)">超過四年沒回希伯來</text>
+              <text x="240" y="216" font-size="12" fill="var(--muted)">或被褫奪身分</text>
+              <path d="M150 150 C70 150 70 110 140 100" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#ar2)"/>
+              <text x="12" y="134" font-size="12" fill="var(--muted)">每四年回去</text>
+              <text x="12" y="150" font-size="12" fill="var(--muted)">重新校準</text>
+              <text x="12" y="166" font-size="12" fill="var(--muted)">（磐約）</text>
+            </g>
+          </svg>
+          <figcaption>拉結體內的「擬態米姆」最多撐四年，過期就永久壞掉，接口重開也沒用。後日談裡的莉莉絲已經是利亞。</figcaption>
+        </figure>
+        </div>
+      </div>
+
+      <div class="panel" data-ch="1">
+        <h3>一般人財的一生</h3>
+        <p style="font-size:.95rem;margin-bottom:12px">其一裡莉莉絲這樣描述黎凡特人的人生路線：</p>
+        <ol style="margin:0;padding-left:1.3em;font-size:.95rem;display:grid;gap:6px">
+          <li>在企業出生，本質上屬於企業的資產。</li>
+          <li>進入希伯來外派的拉普拉斯，完成通識教育。</li>
+          <li>回到企業，只學自己崗位需要的專業知識。</li>
+          <li>然後止步於此。住哪裡、做什麼、能不能生小孩，都有人替你決定。</li>
+        </ol>
+        <p style="font-size:.9rem;color:var(--muted);margin-top:12px">工作能換到生活用的錢，卻很難換到「購買權」。缺少購買權的人，很多就把薪水花在虛擬的後設宇宙裡。</p>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:18px" data-ch="1">
+      <h3>生小孩這件事</h3>
+      <div class="tablebox">
+      <table class="cmp">
+        <thead><tr><th></th><th>誰能用</th><th>能做什麼</th><th>出現</th></tr></thead>
+        <tbody>
+          <tr><td>生育艙</td><td>有「選擇權」的高階人財，需要特殊貢獻才能申請</td><td>隔絕污染，還能在受精前先做基因整形</td><td><span class="chip">其一</span></td></tr>
+          <tr><td>孕囊</td><td>通過伊希切爾審查的一般人財（圖曆776年起）</td><td>只有隔絕污染的基本功能。莉莉絲發明，原本想讓每個人都能生育</td><td><span class="chip">其一</span></td></tr>
+          <tr><td>子宮懷孕</td><td>幾乎沒有人</td><td>在污染下已不是常態。莉莉絲是少見的「自然生育派」</td><td><span class="chip">其五</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="font-size:.9rem;color:var(--muted);margin-top:10px">孕囊推出時被改名成《基因階梯計畫》，還加上評分審查，綜合分數低於九十就永久失去資格。這是莉莉絲對體制失望的起點。</p>
+    </div>
+
+    <div class="panel" style="margin-top:18px" data-ch="10">
+      <h3>可以替換的身體</h3>
+      <div class="tablebox">
+      <table class="cmp">
+        <thead><tr><th></th><th>有沒有大腦</th><th>用途</th><th>誰用得起</th><th>出現</th></tr></thead>
+        <tbody>
+          <tr><td>仿身體</td><td>沒有，只有肢體或器官</td><td>給一般人更換器官、修復身體</td><td>拉馬蘇提供的醫療名額</td><td><span class="chip">其七</span></td></tr>
+          <tr><td>分身體</td><td>沒有，其餘器官完整</td><td>一具永遠不會醒來的空殼，可以把意識換進去使用</td><td>企業高層也未必買得起，一個人通常只有一副</td><td><span class="chip">其七</span></td></tr>
+          <tr data-ch="12"><td>義體</td><td>沒有自己的意識</td><td>萬軍的士兵：機械骨架裡填入馴化過的錯配活組織，由操作者遠端操控</td><td>軍方</td><td><span class="chip">其九</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="map">
+  <div class="wrap">
+    <div class="sec-head"><span class="no">03</span><h2>已知文明地圖</h2>
+      <p>「黎凡特」就是目前已知的人類活動範圍。希伯來不在大陸上，它在西邊海上的尼莫點。</p></div>
+    <div class="mapbox">
+      <figure style="margin:0">
+        <img src="map-sketch.jpg" alt="黎凡特已知文明區手繪地圖：希伯來在西方海上，大陸上有犍陀羅、亞述、梅耶、塔木德、塔爾塔羅斯、伊甸、巴比倫、伯特利、他施、挪得、以攔、拿馬等地，中東部有一大片湖，東緣是山脈。" width="1400" height="991">
+        <figcaption>原作手繪草圖（正式版重繪中）。羅盤的「北」指向左上方。以拉、甲尼不在這張草圖上。</figcaption>
+      </figure>
+      <div class="places" id="placeList"></div>
+    </div>
+
+    <div class="panel scale" data-ch="2">
+      <h3>距離怎麼算：日間時區</h3>
+      <p style="font-size:.93rem;margin-bottom:10px">黎凡特失去了衛星，量不出精確距離，改用「載具一個白天大約跑得到的範圍」當單位。書中註腳說，一個日間時區約等於五百分鐘、六百公里，差不多是一個文明區域的直徑。夜裡移動同一段路會慢很多，叫做「夜間時區」，慢多少沒有定數。</p>
+      <div id="scaleRows"></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="timeline">
+  <div class="wrap">
+    <div class="sec-head"><span class="no">04</span><h2>時間</h2>
+      <p>年份一律用「圖曆」，也就是三大集團成立後的紀年。故事主要發生在圖曆770到800年代。</p></div>
+    <div class="tracks" data-ch="5">
+      <div class="track" style="border-left:4px solid var(--c-heb)"><b>正篇：過去</b><p style="font-size:.93rem">其一到其十，從莉莉絲和亞當相戀、創立亞述，一路寫到巴比倫陷落。</p></div>
+      <div class="track" style="border-left:4px solid var(--c-ash)"><b>後日談：現在</b><p style="font-size:.93rem">陷落多年後。莉莉絲已離開人理、成為利亞，正和亞當打離婚官司；夏娃想弄清楚自己在這件事裡的位置。</p></div>
+    </div>
+    <div class="tl" id="timelineList"></div>
+  </div>
+</section>
+
+<section class="block" id="cast">
+  <div class="wrap">
+    <div class="sec-head"><span class="no">05</span><h2>人物</h2>
+      <p>依所屬分組。顏色對應勢力。</p></div>
+    <div id="castGroups"></div>
+  </div>
+</section>
+
+<section class="block" id="glossary">
+  <div class="wrap">
+    <div class="sec-head"><span class="no">06</span><h2>名詞速查</h2>
+      <p>點開名詞可以看較完整的說明。標籤是這個詞第一次出現的章節。</p></div>
+    <div class="tools">
+      <label for="q" style="position:absolute;left:-9999px">搜尋名詞</label>
+      <input id="q" type="search" placeholder="輸入名詞，例如：磐約、人財、萬軍" autocomplete="off">
+    </div>
+    <div class="tools"><div class="cats" id="cats" role="group" aria-label="分類篩選"></div></div>
+    <div class="gl" id="glList"></div>
+    <p class="empty" id="glEmpty" hidden>找不到符合的名詞。換個關鍵字，或把「我讀到」調到更後面的章節試試。</p>
+    <p class="hidden-note" id="glHidden"></p>
+  </div>
+</section>
+<section class="block" id="errata">
+  <div class="wrap">
+    <div class="sec-head"><span class="no">07</span><h2>勘誤與更新</h2>
+      <p>已出版內容的更正，以及這份導覽的更新紀錄。</p></div>
+    <div class="panel">
+      <h3>上冊勘誤</h3>
+      <div class="tablebox">
+      <table class="cmp">
+        <thead><tr><th>位置</th><th>原文</th><th>更正為</th></tr></thead>
+        <tbody>
+          <tr><td>其一 開頭</td><td>我們介入保護拉結才四個小時</td><td>我們介入保護拉結才兩百多分鐘</td></tr>
+          <tr><td>後日談</td><td>流密色</td><td>流蜜色</td></tr>
+          <tr><td>後日談</td><td>這個退役軍官眼中逐漸不齒的懷疑</td><td>這個現役軍官眼中逐漸不齒的懷疑</td></tr>
+          <tr><td>後日談</td><td>比暴怒的退役軍官更甚的力氣</td><td>比暴怒的現役軍官更甚的力氣</td></tr>
+          <tr><td>其六</td><td>但你怎麼會在伯特利──</td><td>但你怎麼會在挪得──</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:18px">
+      <h3>更新紀錄</h3>
+      <ul style="margin:0;padding-left:1.2em;font-size:.94rem;display:grid;gap:4px">
+        <li><span class="chip">2026-11-13</span> 讀者導覽上線，整理至下冊其十。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">此頁整理上冊與下冊其十為止的內容，以書中寫到的資訊為主，少數基本設定取自原作的世界觀資料。</div>
+</footer>
+
+<script>
+const CH=['序','其一','其二','間篇','其三','後日談','其四','其五','其六','補篇','其七','其八','其九','小結','其十'];
+const chip=i=>`<span class="chip">${CH[i]}</span>`;
+
+const FACTIONS=[
+ {f:'heb',name:'希伯來',en:'Hebraica',ch:0,role:'知識集團',d:'位在西方海上的尼莫點，遠離污染。壟斷教育、技術授權、法規和基因知識，是唯一不做生意的集團。地表人眼中的「學者之國」。',sub:['拉普拉斯：派到各地的基礎教育','塔納赫：把研究變成可用的技術','塔木德：授權後的監管稽核','塔爾塔羅斯：法律監察與執行']},
+ {f:'gan',name:'犍陀羅',en:'Gandhara',ch:0,role:'軍事集團',d:'世界上唯一擁有大規模武力的集團，負責軍事、治安與秩序。雖然是軍隊，平時多半在救災、隔離污染和撤離居民。',sub:['二十四天軍團：最高正規軍','錫安軍團：救援與撤離的第一線','萬軍：錫安旗下的義體部隊','戈蒂亞：商圈警備']},
+ {f:'may',name:'梅耶',en:'Mayer',ch:3,role:'生命科學集團',d:'幾乎壟斷所有生育、基因整形和身體重建。人想活得久、生得出孩子、換得了器官，都得經過梅耶。',sub:['伊希切爾：生育管理、孕囊','伊古德拉希爾：基因整形與延壽','拉馬蘇：仿身體與身體維護']},
+ {f:'eden',name:'伊甸',en:'Eden',ch:0,role:'最大企業，不是集團',d:'文化圈裡唯一能建造跨區載具、做土地淨化的企業，掌握交通與通訊骨幹。和三大集團都有合作，影響力最接近第四個集團。執掌人是雅威，繼承人是亞當。',sub:['廣告語：「伊甸鋪路，世界同行」']},
+ {f:'ash',name:'亞述',en:'',ch:2,role:'人財與資源整合企業',d:'莉莉絲實際主導、以亞當為總裁成立的企業，專門協調土地開發的人財與資源。規則全部公開，不讓任何企業走後門，伊甸也一樣，所以樹敵很多。',sub:['成立資金來自伊甸的「起始擔保」']},
+ {f:'ash',name:'人理',en:'',ch:4,role:'亞述改組後的名字',d:'巴比倫陷落後，亞述改組更名為人理，成為伊甸的子公司，對外負責人換成亞當。後日談提到的「人理」都是指這間公司。',sub:[]},
+];
+
+const PLACES=[
+ {f:'heb',n:'希伯來（尼莫點）',ch:0,d:'西方海上，遠離大陸污染。只有希伯來人能長住。'},
+ {f:'gan',n:'犍陀羅',ch:0,d:'大陸西北。'},
+ {f:'ash',n:'亞述',ch:2,d:'大陸北側中央。'},
+ {f:'may',n:'梅耶',ch:3,d:'大陸東北。梅耶本部也是亞當住院的地方。'},
+ {f:'tal',n:'塔木德・塔爾塔羅斯',ch:1,d:'大陸西側中央，兩塊黃色區域。'},
+ {f:'eden',n:'伊甸',ch:0,d:'大陸南側中央。'},
+ {f:'other',n:'示拿',ch:4,d:'伊甸附近。亞當曾在示拿南境取得未知人種的資料。'},
+ {f:'other',n:'巴比倫',ch:5,d:'南方。圖曆800年大地震的震央，也就是「巴比倫陷落」的地方。'},
+ {f:'other',n:'伯特利',ch:8,d:'巴比倫西北邊。孩子們寄宿在這裡的拉普拉斯，後來因污染擴散而永久撤離。'},
+ {f:'other',n:'他施',ch:6,d:'已知文明的最西點。'},
+ {f:'other',n:'以攔',ch:6,d:'已知文明的最東點。和他施相距將近十八個日間時區。注意和「以拉」是不同的地方。'},
+ {f:'other',n:'以拉',ch:10,d:'不在草圖上。亞當在這裡抽驗動力核心供應商，距離示拿約三個日間時區。'},
+ {f:'other',n:'甲尼',ch:10,d:'不在草圖上。距離示拿大約兩個多日間時區。'},
+ {f:'other',n:'挪得',ch:10,d:'東方邊境，正在快速開發。'},
+ {f:'other',n:'拿馬',ch:5,d:'北方。拿馬育幼院所在地，院長是訶梨帝。'},
+];
+
+const SCALE=[
+ {k:'1 個',w:1/18,t:'約 500 分鐘、600 公里，鄰近商圈之間當天可以來回'},
+ {k:'2 個',w:2/18,t:'亞述到梅耶本部（其四）'},
+ {k:'4 個',w:4/18,t:'亞當出差到外地，晚上還趕回家（其二）'},
+ {k:'近 18 個',w:1,t:'以攔到他施，已知文明的東西兩端'},
+];
+
+const TIMELINE=[
+ {ch:0,f:'other',when:'很久以前',t:'舊文明燒卻',d:'外來的污染全面爆發，舊文明毀滅。倖存的人類退守海上，後來才慢慢回到地表。一般人只知道「紀元前的人類濫用資源，世界才毀滅」。'},
+ {ch:0,f:'heb',when:'圖曆元年',t:'三大集團成立',d:'黎凡特放棄國家制度，改由希伯來、犍陀羅、梅耶三大集團和企業體系治理，並從這年開始用圖曆紀年。'},
+ {ch:1,f:'may',when:'圖曆 776 年',t:'孕囊問世・白箱事件・求婚',d:'莉莉絲發明的孕囊以《基因階梯計畫》推出。莉莉絲被反希伯來組織「綁架」，其實是自己主動去接觸對方。亞當趕到戈蒂亞的會客室，向莉莉絲求婚。'},
+ {ch:2,f:'ash',when:'其二',t:'亞述成立',d:'企劃書由莉莉絲重寫才通過希伯來審核。伊甸派來的人越權動用亞當的生物授權，引發衝突。'},
+ {ch:4,f:'eden',when:'其三',t:'亞當被召回伊甸',d:'雅威召見亞當，亞當交出一份未知人種的基因資料。'},
+ {ch:7,f:'heb',when:'其四～其五',t:'孩子出生',d:'莉莉絲用子宮懷孕，生下兩個孩子，沒有帶他們回希伯來，所以孩子們注定成為利亞。'},
+ {ch:5,f:'heb',when:'圖曆 780～800 年',t:'超長波通訊設備',d:'亞當避開伊甸，促成一套只屬於希伯來的安全通訊設備和專用載具。'},
+ {ch:8,f:'heb',when:'其六',t:'莉莉絲回希伯來口試',d:'莉莉絲的論文以「有條件通過」作收。同一時間，伊甸對多個文化圈發出地殼活動異常的警示。'},
+ {ch:10,f:'eden',when:'其七',t:'伊甸打壓亞述',d:'伊甸對亞述限速、限流、壓縮運能。亞當在各地奔波應對。'},
+ {ch:11,f:'other',when:'圖曆 800 年起',t:'巴比倫大陷落',d:'八級強震襲擊巴比倫，之後三年餘震不斷。被封住的地下古河道重新連通，污染順著水路擴散，周邊地區陸續永久撤離。'},
+ {ch:12,f:'gan',when:'其九～其十',t:'伯特利撤離',d:'亞當的載具翻覆，被萬軍救起。莉莉絲帶著萬軍深入伯特利調查污染，撤離途中遭遇異變。'},
+ {ch:5,f:'ash',when:'陷落之後',t:'亞述改名人理',d:'亞述改組更名為人理、成為伊甸的子公司，對外負責人換成亞當。用莉莉絲的基因製造出來的「莉莉姆們」後來由拿馬育幼院收容。'},
+ {ch:5,f:'ash',when:'現在',t:'離婚訴訟（後日談）',d:'莉莉絲已離開人理、被褫奪拉結身分。莉莉絲和亞當的離婚官司，實際上牽動希伯來和伊甸的角力。',now:true},
+];
+
+const CAST=[
+ {g:'主角',items:[
+  {f:'heb',n:'莉莉絲',ch:1,tags:['希伯來','亞述執行長'],d:'希伯來拉結，孕囊的發明人，主修身心複合輔助醫學，是少數的自然生育派。亞述的實際掌權者。後日談時已被褫奪拉結身分，成為利亞。'},
+  {f:'eden',n:'亞當',ch:0,tags:['伊甸繼承人','亞述總裁'],d:'伊甸的繼承人，自稱「伊甸最完美的造物」。在希伯來受訓時和莉莉絲、涅墨西妮是同學。求婚時對莉莉絲說「請像使用工具一樣使用我」。'},
+ ]},
+ {g:'伊甸',items:[
+  {f:'eden',n:'雅威',ch:4,tags:['伊甸執掌人'],d:'亞當的父親，坐輪椅，保有讓人伺候的老派習慣，對希伯來懷有很深的敵意。'},
+  {f:'eden',n:'釤克芙',ch:3,tags:['管家'],d:'長年服務於伊甸的管家。先被派進亞述秘書室，後來成為亞當家的管家，受過拉馬蘇的健康管理訓練。'},
+  {f:'eden',n:'錫',ch:3,tags:['管家'],d:'跟在雅威身邊的管家。'},
+  {f:'eden',n:'重錫',ch:3,tags:['管家'],d:'伊甸管家，間篇裡和釤克芙通話。'},
+ ]},
+ {g:'希伯來',items:[
+  {f:'heb',n:'涅墨西妮（妮娜）',ch:5,tags:['雅各'],d:'莉莉絲在希伯來的室友和摯友，主修資訊治理與政治研究。後日談時已是雅各，也是莉莉絲的「行為風險擔保代理人」。'},
+  {f:'heb',n:'指導拉比',ch:8,tags:['拉比'],d:'莉莉絲論文的指導老師，出身塔納赫，個性溫和。'},
+  {f:'heb',n:'老鹹菜',ch:8,tags:['拉比'],d:'莉莉絲對口試主審拉比的私下叫法。學生時代的必修夢魘，視知識為聖殿。'},
+ ]},
+ {g:'後日談的人們',items:[
+  {f:'ash',n:'夏娃',ch:5,tags:['亞當的妻子','寧胡爾薩格'],d:'亞當現在的妻子，被稱為「人理的肋骨」。出身寧胡爾薩格族系，離開伊甸後受莉莉絲庇護，想弄清楚自己的族系在巴比倫陷落裡扮演什麼角色。'},
+  {f:'gan',n:'訶梨帝',ch:5,tags:['拿馬院長'],d:'前二十四天軍團長，巴比倫陷落時負責救援。退役後成為拿馬育幼院院長，人稱鬼子母，是莉莉絲的朋友。'},
+  {f:'gan',n:'帝釋天',ch:5,tags:['犍陀羅'],d:'訶梨帝當年的上司，把設立拿馬的草案交給訶梨帝。'},
+  {f:'tal',n:'別西卜',ch:5,tags:['律法惡魔'],d:'莉莉絲離婚訴訟的專任律師，脾氣不好，出身希伯來。'},
+  {f:'tal',n:'維納斯（路西華）',ch:5,tags:['夏娃的保鑣'],d:'霍普利斯派給夏娃的保鑣，塔爾塔羅斯出身，是被除名的希伯來人。維納斯和路西華是同一個人，訶梨帝提到路西華和伊甸有些淵源。'},
+ ]},
+ {g:'軍方',items:[
+  {f:'gan',n:'翳數',ch:3,tags:['萬軍','軍醫'],d:'萬軍的小隊長兼軍醫。亞當車禍後由他治療，並把萬軍的資源交給莉莉絲調度。'},
+  {f:'gan',n:'上尉',ch:14,tags:['萬軍'],d:'其十裡暫代連長的萬軍軍官，對後到的同袍保持戒心。'},
+ ]},
+ {g:'亞述的同事',items:[
+  {f:'ash',n:'阿薩謝爾',ch:11,tags:['亞述'],d:'亞述在伯特利團隊的資料彙整員，通知莉莉絲現場沒有負責人。'},
+  {f:'ash',n:'亞述秘書群',ch:10,tags:['亞述'],d:'阿梅雷塔特、瓦胡、赫沙特拉、阿沙等人，被亞當的行程折磨得很慘。'},
+ ]},
+ {g:'孩子們',items:[
+  {f:'heb',n:'莉莉姆與利姆',ch:11,tags:['莉莉絲的孩子'],d:'莉莉絲用子宮懷孕親生的兩個孩子，寄宿在伯特利的拉普拉斯。後日談的「莉莉姆們」是另一群孩子，見名詞速查。'},
+ ]},
+];
+
+const CATS=['全部','勢力與組織','身分','生育與身體','科技與制度','時間與地點','事件'];
+const G=[
+ // 勢力與組織
+ ['三大集團','勢力與組織','other',0,'希伯來、犍陀羅、梅耶，世界僅存的三個最高主權。','擁有土地統治權和文化制度的制定權。所有文化圈、商社和企業最後都要依附三大集團的授權。'],
+ ['希伯來','勢力與組織','heb',0,'掌管知識、教育與技術授權的集團。','位在海上的尼莫點。希伯來把「學制」當成國家本身，是唯一保留完整舊制教育的地方。'],
+ ['犍陀羅','勢力與組織','gan',0,'掌管軍事、治安與秩序的集團。','對希伯來的拉結保護得非常周到，拉結一有危險，可能被直接撤回希伯來。'],
+ ['梅耶','勢力與組織','may',3,'掌管醫療、生育、基因與身體技術的集團。','壽命長短、能不能生育、能不能換器官，幾乎都由梅耶壟斷。'],
+ ['伊甸','勢力與組織','eden',0,'最大的企業，掌握交通、通訊和土地淨化。','不是三大集團之一，卻是文化圈的基礎建設骨幹，各企業之間的協調過去多半靠伊甸一句話。'],
+ ['亞述','勢力與組織','ash',2,'莉莉絲主導、亞當任總裁的人財與資源整合企業。','規章寫明「與任何母企業、關係企業間之交易，皆視同獨立交易」，被涅墨西妮笑稱是舔狗宣言。'],
+ ['人理','勢力與組織','ash',4,'亞述改組後的名字，伊甸的子公司。','改組發生在巴比倫陷落之後，對外負責人換成亞當。'],
+ ['拉普拉斯','勢力與組織','heb',1,'希伯來派到各地的教育體系。','負責基礎教育和通識，人財在這裡完成學業後就回到企業。孩子們寄宿的也是伯特利的拉普拉斯。'],
+ ['塔納赫','勢力與組織','heb',1,'把學術研究變成可落地技術的機構。','拉結的研究通過審議後，由塔納赫工程化，再授權給合作企業。孕囊就是在這一步被改成《基因階梯計畫》。'],
+ ['塔木德','勢力與組織','heb',1,'技術授權之後的監管機構。','派拉結輪值到各企業，稽核技術怎麼被使用、有沒有外流。'],
+ ['塔爾塔羅斯','勢力與組織','tal',2,'希伯來的法律監察與執行機構。','調查違規、黑市和知識犯罪，手段強硬，被稱為「鬣狗」。招惹塔爾塔羅斯對企業來說是大事。'],
+ ['二十四天軍團','勢力與組織','gan',5,'犍陀羅的最高正規軍。','火力最強。訶梨帝曾是軍團長。'],
+ ['錫安軍團','勢力與組織','gan',11,'犍陀羅的救援部隊。','負責初期救援、撤離和災區第一線，二十四天軍團介入之前先到場。'],
+ ['萬軍','勢力與組織','gan',1,'錫安軍團旗下的特殊部隊，多半由義體組成。','一名操作者能同時操作多具義體，萬軍的基本編制就是以此計算。白箱事件時就已經有萬軍，只是當時還沒有完整的編制。'],
+ ['戈蒂亞','勢力與組織','gan',1,'犍陀羅的商圈警備。','維持商圈治安與巡查，高頻輪調以免和地方勾結。白箱事件後莉莉絲就被安置在戈蒂亞的大樓。'],
+ ['伊希切爾','勢力與組織','may',1,'梅耶的全民生育系統。','管生育許可、孕囊和新生兒健康。《基因階梯計畫》的審查就由伊希切爾執行。'],
+ ['伊古德拉希爾','勢力與組織','may',4,'梅耶的基因與壽命工程。','基因整形、延壽、美貌調整都在這裡，需要高額購買權。'],
+ ['拉馬蘇','勢力與組織','may',6,'梅耶的仿身體與身體維護部門。','器官替換、身體修復、健康管理。釤克芙受過拉馬蘇的訓練。'],
+ ['文化圈','勢力與組織','other',1,'三大集團直轄以外的所有地區。','表面自治，實際上教育、技術和軍事都受集團干預，沒有民主和選舉。分兩級：一級文化圈由三大集團直接支配，像飛地或衛星都市；二級文化圈是不直接受三大集團控制的小型商圈聚落。'],
+ ['污染與撤離等級','科技與制度','gan',11,'數字越小越嚴重，例如準二級比準四級嚴重。','犍陀羅的慣例是準二級以上（也就是更嚴重）才強制遣返希伯來人，所以伯特利依準四級撤離時，莉莉絲還能留在現場。'],
+ ['地區商社','勢力與組織','other',1,'由多家企業組成的地方治理單位。','負責一整個區域的民生、治理和資源分配，政策要經過大企業和集團授權。'],
+ ['企業','勢力與組織','other',1,'最基層的經濟和治理單位，也是人出生、受訓、生活的地方。','人民本質上屬於企業資產。企業之間會激烈爭奪人財和授權。'],
+ ['霍普利斯','勢力與組織','tal',5,'別西卜、維納斯等「律法惡魔」所屬的地方。','後日談裡負責莉莉絲的離婚訴訟，也替夏娃安排保鑣。'],
+ ['律法惡魔','勢力與組織','tal',5,'霍普利斯律師們的稱呼。','別西卜就是其中之一，從眾多律法惡魔裡搶到了這場訴訟的委任權。'],
+ ['拿馬育幼院','勢力與組織','gan',5,'收容錯配體孩子的機構，院長是訶梨帝。','最初是為了收容「莉莉姆們」而設，由莉莉絲全力促成。'],
+ ['莉莉姆們','生育與身體','heb',5,'後日談裡，用莉莉絲的基因製造出來的孩子們。','和莉莉絲親生的莉莉姆、利姆是不同的孩子。他們由莉莉絲一手拼湊照顧，拿馬育幼院最初就是為了收容他們而設。'],
+ // 身分
+ ['拉結','身分','heb',1,'正式的希伯來公民，外界眼中的「希伯來學者」。','能連上行星意識網路下載知識，可以到各地工作，但必須定期回希伯來。希伯來內部彼此直呼名字，不加尊稱。'],
+ ['利亞','身分','heb',5,'失去網路連線的希伯來人。','可能是太久沒回希伯來、受污染、被流放或犯罪。法律上仍是希伯來人，卻不能長住希伯來。'],
+ ['雅各','身分','heb',5,'希伯來的最高執政者，管理行星意識網路。','能開關拉結連上網路的接口。成為雅各後幾乎不能離開希伯來，所以地表很少有人見過雅各。'],
+ ['拉比','身分','heb',8,'在希伯來教育拉結的高等教師。','可以直接當稱呼用，例如「拉比，請問……」。'],
+ ['人財','身分','other',1,'黎凡特對人員的稱呼。','人被視為企業可以培養、配置、衡量的資源，「人才」因此寫成「人財」。'],
+ ['通用人財','身分','other',1,'一般的、沒有特殊資格的人財。','孕囊就是第一個「下放」給通用人財的生育權。也寫作普適型人財。'],
+ ['閾外居民','身分','heb',5,'希伯來人對非希伯來人的稱呼。','也寫作「域外平民」。'],
+ // 生育與身體
+ ['污染（詛咒）','生育與身體','other',0,'毀滅舊文明的外來污染，一般人稱「詛咒」。','會干擾神經造成幻覺發瘋、讓基因亂混、燒毀電子設備，嚴重時連能源都無法使用。懂科學的人知道它和「怨念」「天罰」無關。'],
+ ['錯配・基因錯配體','生育與身體','other',4,'污染讓基因隨機交叉，混出多種生物特徵的現象和生物。','例如人與植物、動物，甚至與機械嵌合。地表到處都有錯配體，所以人們盡量不碰實體資源。'],
+ ['淨化','生育與身體','other',5,'用設備抵消污染，讓土地或空間能再被使用。','淨化很耗資源。伊甸是唯一能做土地淨化的企業，撤離時也要靠淨化裝置撐出安全區。'],
+ ['生育艙','生育與身體','may',1,'能在受精前先做基因整形的生育設備。','過去只有高階人財能用，是地位象徵。'],
+ ['孕囊','生育與身體','may',1,'莉莉絲發明，讓一般人財也能生育的裝置。','只有隔絕污染的基本功能，不能優化基因，所以被部分高階人財看不起。'],
+ ['選擇權','生育與身體','may',1,'使用生育艙的資格。','需要出具特殊貢獻才能申請。孕囊推出後，有些人覺得選擇權被「拉低了價值」。'],
+ ['基因階梯計畫','生育與身體','may',1,'孕囊推行時的計畫名稱。','莉莉絲原本取名《普及型懷孕支援模組》，被塔納赫改名並加入評分審查，分數低於九十就永久失去資格，還要先植入精神監測晶片。'],
+ ['基因整形','生育與身體','may',1,'改造基因以抵抗污染、延長壽命或調整外貌。','亞當出生前做過一次極昂貴的胚胎前基因整形，一度花光雅威所有的購買權。'],
+ ['自然生育派','生育與身體','heb',1,'主張人類生殖系統仍有價值的少數派。','莉莉絲是其中之一，後來也真的用子宮懷孕生下孩子。'],
+ ['仿身體','生育與身體','may',10,'只有肢體或器官的培養體。','給一般人更換器官用。'],
+ ['分身體','生育與身體','may',10,'器官完整、但沒有大腦的培養體。','是一具永遠不會醒來的空殼，可以把意識換進去。極昂貴，一個人通常只能有一副。'],
+ ['義體','生育與身體','gan',12,'萬軍使用的「有機的機器人」。','機械骨架裡填入被馴化控制的錯配活組織，本身能感知環境、回傳資料，但沒有自己的意識，由操作者遠端操控。'],
+ ['寧胡爾薩格','生育與身體','ash',5,'夏娃所屬的族系，長年由伊甸管理。','過去多和伊甸或相關企業高層聯姻，基因從未流出伊甸，直到夏娃的資料被收進希伯來。'],
+ ['千子','生育與身體','heb',5,'希伯來替寧胡爾薩格基因圖譜取的名字。','涅墨西妮說，千子在基因上對「母巢」的訊號非常敏感，幾乎無法拒絕母巢的指令。'],
+ ['母巢','生育與身體','heb',5,'對人類存續有極高研究價值的特殊存在。','希伯來保存著真正母巢的基因圖譜，涅墨西妮說外面沒有完整的母巢基因流出。'],
+ // 科技與制度
+ ['行星意識網路（雅各系統）','科技與制度','heb',5,'希伯來人共享知識的網路。','因為管理者都叫雅各，所以也被稱為「雅各系統」。'],
+ ['知域','科技與制度','heb',5,'每個希伯來人自帶的私人知識空間。','可以在裡面檢索、下載知識，也能布置成房間。下載來卻沒消化的知識，用起來會頭痛。'],
+ ['擬態米姆','科技與制度','heb',7,'植在拉結體內、連上行星意識網路的奈米機器。','是舊文明留下的殘缺技術，至今無法完整複製。在污染地很不穩定，所以莉莉絲靠近污染就偏頭痛。'],
+ ['磐約','科技與制度','heb',7,'拉結必須定期回希伯來重新校準的規定。','擬態米姆的共振最多撐四年，過期就永久壞掉，接口重開也救不回來。嬰兒要在出生一個月內帶回希伯來，才能保有拉結身分。'],
+ ['存取權','科技與制度','heb',5,'希伯來人用的貢獻點數。','決定一個人在網路裡能取得多少知識。'],
+ ['購買權','科技與制度','other',1,'希伯來以外地區的兌換機制。','用來換基因整形、淨化等技術服務。一般工作賺得到錢，卻很難換到購買權。'],
+ ['貢獻點（貢獻值）','科技與制度','other',1,'對社會的貢獻自動換算成的點數。','在希伯來換成存取權，在地表換成購買權。'],
+ ['生物授權','科技與制度','other',2,'用個人生物資訊做的身分驗證和授權。','等於簽名兼鑰匙。秘書私自用了亞當的生物授權，是其二衝突的導火線。'],
+ ['起始擔保','科技與制度','ash',8,'新企業成立時由既有企業預先提供資源的機制。','亞述的起始擔保來自伊甸，這筆人情債一直懸在亞述頭上。'],
+ ['後設宇宙','科技與制度','other',4,'虛擬世界。','沒什麼購買權的一般人常把薪水花在這裡，追求比現實安適的精神生活。其三也寫作「後設世界」。'],
+ ['載具','科技與制度','eden',2,'交通工具的統稱。','一般人搭通用載具；伊甸做過一批專供希伯來人用的訂製載具；亞當的成年禮是一架世上僅有的高速專用載具。'],
+ ['地梭','科技與制度','eden',6,'跨區往返的長途班次。','秘書們訂的回程就是地梭。莉莉絲也用「拿自己當地梭」形容亞當到處跑。'],
+ ['超長波通訊設備','科技與制度','heb',5,'只屬於希伯來的安全通訊設備。','不經過伊甸的系統，能完整連接五感並即時監測身體狀況，一有異常就會啟動軍團級救援。'],
+ // 時間與地點
+ ['黎凡特','時間與地點','other',1,'目前已知的人類活動範圍。','書中常說的「黎凡特地界」通常不包括希伯來本土。'],
+ ['尼莫點','時間與地點','heb',5,'希伯來所在的海上位置。','遠離大陸污染。'],
+ ['圖曆','時間與地點','other',1,'三大集團成立後使用的紀年，也叫黎凡特曆。','故事的年份都用圖曆，例如圖曆776年孕囊問世。'],
+ ['舊曆','時間與地點','other',8,'世界毀滅之後、圖曆之前的紀年。',''],
+ ['日間時區','時間與地點','other',2,'距離兼時間的單位，約等於載具一個白天的行程。','書中註腳說約五百分鐘、六百公里，差不多是一個文明區域的直徑。黎凡特失去衛星，這只是經驗上的估算，實際會隨載具、天候和污染浮動。'],
+ ['夜間時區','時間與地點','other',10,'夜裡移動同一段距離多花的時間。','慢多少沒有定數，原因學界也沒有定論。老練的駕駛能從夜行時間的變化反推污染濃度。'],
+ ['小時','時間與地點','heb',1,'只有希伯來保留的二十四小時制。','地表一般人不太懂「幾點鐘」，對希伯來人來說，「小時」也是文明正統的象徵。'],
+ // 事件
+ ['白箱事件','事件','may',1,'莉莉絲以孕囊發明人身分被反希伯來組織「綁架」的事件。','其實是莉莉絲主動去接觸對方。事件本身沒有動搖莉莉絲，反倒是周圍過度的保護和安撫讓莉莉絲煩躁。'],
+ ['巴比倫陷落','事件','other',5,'圖曆800年起襲擊巴比倫的大地震與後續污染災難。','三年餘震讓地下古河道重新連通，污染順著地下水擴散，巴比倫和周邊地區永久撤離。犍陀羅到場時，現場只剩莉莉絲一個活人。'],
+ ['離婚訴訟','事件','ash',5,'後日談的主線：莉莉絲和亞當之間的離婚官司。','表面是離婚，實際上牽動希伯來和伊甸的利益角力，三大集團的高層都牽涉其中。'],
+];
+
+const fcls=f=>'f-'+f;
+let readTo=CH.length-1;
+try{const v=localStorage.getItem('levant-readTo'); if(v!==null&&!isNaN(+v)) readTo=Math.min(+v,CH.length-1);}catch(e){}
+
+function render(){
+  // 勢力卡
+  document.getElementById('factionCards').innerHTML=FACTIONS.map(x=>`
+    <article class="card ${fcls(x.f)}" data-ch="${x.ch}">
+      <div class="role">${x.role}</div>
+      <h3>${x.name}${x.en?` <span class="en">${x.en}</span>`:''}</h3>
+      <p>${x.d}</p>
+      ${x.sub.length?`<ul>${x.sub.map(s=>`<li>${s}</li>`).join('')}</ul>`:''}
+    </article>`).join('');
+  document.getElementById('placeList').innerHTML=PLACES.map(p=>`
+    <div class="place ${fcls(p.f)}" data-ch="${p.ch}"><span class="dot"></span><div><b>${p.n}</b><br>${p.d}</div></div>`).join('');
+  document.getElementById('scaleRows').innerHTML=SCALE.map(s=>`
+    <div class="scale-row"><span style="font-family:var(--mono)">${s.k}</span><div><div class="scale-bar" style="width:${Math.max(4,s.w*100)}%"></div><div style="color:var(--muted)">${s.t}</div></div></div>`).join('');
+  document.getElementById('timelineList').innerHTML=TIMELINE.map(e=>`
+    <div class="ev ${fcls(e.f)}${e.now?' now':''}" data-ch="${e.ch}" style="--fc:var(--c-${e.f==='other'?'other':e.f})">
+      <div class="when">${e.when}</div><h3>${e.t}</h3><p>${e.d}</p></div>`).join('');
+  document.getElementById('castGroups').innerHTML=CAST.map(g=>`
+    <div class="castgroup" data-group><h3>${g.g}</h3><div class="cast">${g.items.map(p=>`
+      <div class="person ${fcls(p.f)}" data-ch="${p.ch}">
+        <div class="avatar" aria-hidden="true">${p.n[0]}</div>
+        <div><b>${p.n}</b><div class="meta">${p.tags.map(t=>`<span class="chip">${t}</span>`).join('')}${chip(p.ch)}</div><p>${p.d}</p></div>
+      </div>`).join('')}</div></div>`).join('');
+  document.getElementById('cats').innerHTML=CATS.map((c,i)=>`<button type="button" id="cat-${i}" aria-pressed="${i===0}">${c}</button>`).join('');
+}
+
+let cat='全部';
+function renderGlossary(){
+  const q=document.getElementById('q').value.trim();
+  const shown=[], later=[];
+  G.forEach(g=>{
+    const [term,c,f,ch,s,l]=g;
+    if(cat!=='全部'&&c!==cat) return;
+    if(q && !(term+s+l).includes(q)) return;
+    (ch>readTo?later:shown).push(g);
+  });
+  document.getElementById('glList').innerHTML=shown.map(([term,c,f,ch,s,l])=>`
+    <details class="term ${fcls(f)}">
+      <summary><span class="t"><b>${term}</b>${chip(ch)}</span><span class="s">${s}</span>${l?'<span class="hint">看更多</span>':''}</summary>
+      ${l?`<div class="more">${l}</div>`:''}
+    </details>`).join('');
+  document.getElementById('glEmpty').hidden=shown.length>0;
+  document.getElementById('glHidden').textContent=later.length?`另有 ${later.length} 個名詞在「${CH[readTo]}」之後才出現，已先藏起來。`:'';
+}
+
+function applyRead(){
+  document.querySelectorAll('[data-ch]').forEach(el=>el.classList.toggle('is-later',+el.dataset.ch>readTo));
+  document.querySelectorAll('[data-group]').forEach(g=>{
+    const any=[...g.querySelectorAll('[data-ch]')].some(el=>!el.classList.contains('is-later'));
+    g.style.display=any?'':'none';
+  });
+  renderGlossary();
+}
+
+render();
+const sel=document.getElementById('readTo');
+sel.innerHTML=CH.map((c,i)=>`<option value="${i}">${c}${i===CH.length-1?'（目前最新）':''}</option>`).join('');
+sel.value=readTo;
+sel.addEventListener('change',()=>{readTo=+sel.value;try{localStorage.setItem('levant-readTo',readTo)}catch(e){};applyRead();});
+document.getElementById('q').addEventListener('input',renderGlossary);
+document.getElementById('cats').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  cat=b.textContent;
+  document.querySelectorAll('#cats button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  renderGlossary();
+});
+applyRead();
+</script>
+</body>
+</html>
